@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="src\AiCustomerService.Api\AiCustomerService.Api.csproj" />
+  <Project Path="tests\AiCustomerService.Api.Tests\AiCustomerService.Api.Tests.csproj" />
+</Solution>

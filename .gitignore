@@ -8,7 +8,6 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-build/
 develop-eggs/
 dist/
 downloads/
@@ -45,14 +44,17 @@ coverage.xml
 .pytest_cache/
 cover/
 
-# Environments
+# Python virtual environments
 .env
-.venv
+.venv/
 env/
 venv/
 ENV/
 env.bak/
 venv.bak/
+
+# uv
+uv.lock
 
 # IDEs
 .idea/
@@ -60,27 +62,65 @@ venv.bak/
 *.swp
 *.swo
 *~
-.DS_Store
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
 
-# Next.js
+# OS
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Next.js / Node
 .next/
 out/
-build/
 node_modules/
 .vercel
+.turbo/
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
 
-# Data
+# .NET
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+*.nupkg
+*.snupkg
+*.mdf
+*.ldf
+project.lock.json
+TestResults/
+BenchmarkDotNet.Artifacts/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+bld/
+[Ll]og/
+[Ll]ogs/
+
+# Data / databases
 data/db/
 data/indexes/
 *.db
 *.sqlite
 *.sqlite3
 
+# Docker
+docker-data/
+
 # Temporary files
 *.tmp
 *.temp
 .temp/
 
-# OS
-Thumbs.db
+# Build outputs
+build/

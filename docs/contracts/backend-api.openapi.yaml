@@ -1,0 +1,438 @@
+openapi: 3.1.0
+info:
+  title: AI Customer Service - Backend API
+  description: Public-facing REST API consumed by the Frontend Admin. Proxies to the Backend Core service.
+  version: 0.1.0
+
+servers:
+  - url: http://localhost:5000
+    description: Local development
+
+paths:
+  /api/v1/health:
+    get:
+      operationId: healthCheck
+      summary: Health check (includes Core connectivity status)
+      tags: [Health]
+      responses:
+        "200":
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: healthy
+                  core_status:
+                    type: string
+                    example: healthy
+
+  /api/v1/query:
+    post:
+      operationId: queryKnowledgeBase
+      summary: Ask a question against a Knowledge Base
+      tags: [Query]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QueryRequest"
+      responses:
+        "200":
+          description: Query processed successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QueryResponse"
+        "400":
+          description: Invalid request
+        "404":
+          description: Knowledge Base not found
+        "503":
+          description: Core service unavailable
+
+  /api/v1/knowledge-bases:
+    get:
+      operationId: listKnowledgeBases
+      summary: List all Knowledge Bases
+      tags: [KnowledgeBases]
+      responses:
+        "200":
+          description: List of Knowledge Bases
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/KnowledgeBase"
+    post:
+      operationId: createKnowledgeBase
+      summary: Create a new Knowledge Base
+      tags: [KnowledgeBases]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateKnowledgeBaseRequest"
+      responses:
+        "201":
+          description: Knowledge Base created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KnowledgeBase"
+        "400":
+          description: Invalid request
+
+  /api/v1/knowledge-bases/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      operationId: getKnowledgeBase
+      summary: Get Knowledge Base details
+      tags: [KnowledgeBases]
+      responses:
+        "200":
+          description: Knowledge Base details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KnowledgeBase"
+        "404":
+          description: Knowledge Base not found
+    delete:
+      operationId: deleteKnowledgeBase
+      summary: Delete a Knowledge Base
+      tags: [KnowledgeBases]
+      responses:
+        "204":
+          description: Knowledge Base deleted
+        "404":
+          description: Knowledge Base not found
+
+  /api/v1/knowledge-bases/{id}/documents:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      operationId: listDocuments
+      summary: List documents in a Knowledge Base
+      tags: [Documents]
+      responses:
+        "200":
+          description: List of documents
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Document"
+        "404":
+          description: Knowledge Base not found
+    post:
+      operationId: uploadDocument
+      summary: Upload a document to a Knowledge Base
+      tags: [Documents]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "201":
+          description: Document uploaded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Document"
+        "400":
+          description: Invalid file
+        "404":
+          description: Knowledge Base not found
+
+  /api/v1/knowledge-bases/{id}/documents/{doc_id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: doc_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    delete:
+      operationId: deleteDocument
+      summary: Delete a document from a Knowledge Base
+      tags: [Documents]
+      responses:
+        "204":
+          description: Document deleted
+        "404":
+          description: Document not found
+
+  /api/v1/knowledge-bases/{id}/index:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    post:
+      operationId: triggerIndexing
+      summary: Trigger re-indexing of a Knowledge Base
+      tags: [Documents]
+      responses:
+        "202":
+          description: Indexing triggered
+        "404":
+          description: Knowledge Base not found
+
+  /api/v1/interactions:
+    get:
+      operationId: listInteractions
+      summary: List past interactions
+      tags: [Interactions]
+      parameters:
+        - name: kb_id
+          in: query
+          required: false
+          schema:
+            type: string
+            format: uuid
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [answered, unknown, error]
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 50
+            maximum: 100
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 0
+      responses:
+        "200":
+          description: List of interactions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Interaction"
+
+  /api/v1/interactions/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      operationId: getInteraction
+      summary: Get interaction details
+      tags: [Interactions]
+      responses:
+        "200":
+          description: Interaction details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Interaction"
+        "404":
+          description: Interaction not found
+
+  /api/v1/dashboard/stats:
+    get:
+      operationId: getDashboardStats
+      summary: Get aggregated dashboard statistics
+      tags: [Dashboard]
+      responses:
+        "200":
+          description: Dashboard statistics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardStats"
+
+components:
+  schemas:
+    QueryRequest:
+      type: object
+      required: [knowledge_base_id, question]
+      properties:
+        knowledge_base_id:
+          type: string
+          format: uuid
+        question:
+          type: string
+          minLength: 1
+          maxLength: 2000
+
+    QueryResponse:
+      type: object
+      required: [status, interaction_id]
+      properties:
+        status:
+          type: string
+          enum: [answered, unknown, error]
+        answer:
+          type: string
+          nullable: true
+        citations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Citation"
+          default: []
+        interaction_id:
+          type: string
+          format: uuid
+        error:
+          type: string
+          nullable: true
+
+    Citation:
+      type: object
+      required: [source_document, chunk_id, relevance_score]
+      properties:
+        source_document:
+          type: string
+        page:
+          type: integer
+          nullable: true
+        chunk_id:
+          type: string
+        relevance_score:
+          type: number
+          format: double
+          minimum: 0
+          maximum: 1
+
+    KnowledgeBase:
+      type: object
+      required: [id, name, created_at]
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+
+    CreateKnowledgeBaseRequest:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 200
+        description:
+          type: string
+          nullable: true
+          maxLength: 1000
+
+    Document:
+      type: object
+      required: [id, kb_id, filename, status, chunks_count, uploaded_at]
+      properties:
+        id:
+          type: string
+          format: uuid
+        kb_id:
+          type: string
+          format: uuid
+        filename:
+          type: string
+        status:
+          type: string
+          enum: [pending, processing, indexed, error]
+        chunks_count:
+          type: integer
+        uploaded_at:
+          type: string
+          format: date-time
+
+    Interaction:
+      type: object
+      required: [id, kb_id, question, status, created_at]
+      properties:
+        id:
+          type: string
+          format: uuid
+        kb_id:
+          type: string
+          format: uuid
+        question:
+          type: string
+        answer:
+          type: string
+          nullable: true
+        status:
+          type: string
+          enum: [answered, unknown, error]
+        citations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Citation"
+          default: []
+        created_at:
+          type: string
+          format: date-time
+
+    DashboardStats:
+      type: object
+      required:
+        - total_interactions
+        - answered_count
+        - unknown_count
+        - knowledge_base_count
+        - document_count
+      properties:
+        total_interactions:
+          type: integer
+        answered_count:
+          type: integer
+        unknown_count:
+          type: integer
+        knowledge_base_count:
+          type: integer
+        document_count:
+          type: integer

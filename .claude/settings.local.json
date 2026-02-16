@@ -21,7 +21,10 @@
       "WebFetch(domain:*)",
       "WebFetch(domain:docs.anthropic.com)",
       "mcp__serena",
-      "mcp__docs-langchain"
+      "mcp__docs-langchain",
+      "Bash(dotnet build:*)",
+      "Bash(pnpm install:*)",
+      "Bash(pnpm build:*)"
     ],
     "deny": []
   },
