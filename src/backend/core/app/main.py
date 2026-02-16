@@ -9,7 +9,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import Settings
-from app.interfaces.api.routes import health
+from app.interfaces.api.routes import documents, health, interactions, knowledge_bases, query
 
 
 @asynccontextmanager
@@ -46,6 +46,10 @@ def create_app() -> FastAPI:
 
     # Include routers
     app.include_router(health.router)
+    app.include_router(query.router)
+    app.include_router(knowledge_bases.router)
+    app.include_router(documents.router)
+    app.include_router(interactions.router)
 
     return app
 

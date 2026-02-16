@@ -1,5 +1,6 @@
 using AiCustomerService.Api.Application.Interfaces;
 using AiCustomerService.Api.Application.Services;
+using AiCustomerService.Api.Infrastructure.Middleware;
 using AiCustomerService.Api.Infrastructure.Telemetry;
 using FastEndpoints;
 using FastEndpoints.Swagger;
@@ -41,9 +42,6 @@ builder.Services.AddHttpClient<ICoreApiClient, CoreApiClient>(client =>
     client.Timeout = TimeSpan.FromSeconds(timeoutSeconds);
 });
 
-// Register Core API client
-builder.Services.AddScoped<ICoreApiClient, CoreApiClient>();
-
 // OpenTelemetry setup
 TelemetrySetup.ConfigureOpenTelemetry(builder.Services, builder.Configuration);
 
@@ -54,6 +52,8 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline
 app.UseCors();
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.UseFastEndpoints(c =>
 {
