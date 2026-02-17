@@ -16,4 +16,5 @@ public interface ICoreApiClient
     Task<List<InteractionDto>> ListInteractionsAsync(CancellationToken ct = default);
     Task<InteractionDto> GetInteractionAsync(string id, CancellationToken ct = default);
     Task<DashboardStatsDto> GetDashboardStatsAsync(CancellationToken ct = default);
+    Task<bool> CheckHealthAsync(CancellationToken ct = default);
 }

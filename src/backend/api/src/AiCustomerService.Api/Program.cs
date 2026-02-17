@@ -45,8 +45,7 @@ builder.Services.AddHttpClient<ICoreApiClient, CoreApiClient>(client =>
 // OpenTelemetry setup
 TelemetrySetup.ConfigureOpenTelemetry(builder.Services, builder.Configuration);
 
-// Health checks
-builder.Services.AddHealthChecks();
+// Health checks are handled by the FastEndpoints HealthEndpoint
 
 var app = builder.Build();
 
@@ -64,7 +63,5 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwaggerGen();
 }
-
-app.MapHealthChecks("/api/v1/health");
 
 app.Run("http://0.0.0.0:5000");

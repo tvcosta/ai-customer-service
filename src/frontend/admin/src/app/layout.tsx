@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { Toaster } from "sonner";
+import { ErrorBoundary } from "@/components/layout/error-boundary";
 
 export const metadata: Metadata = {
   title: "AI Customer Service Admin",
@@ -14,7 +16,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
-        {children}
+        <ErrorBoundary>
+          {children}
+        </ErrorBoundary>
+        <Toaster position="bottom-right" richColors closeButton />
       </body>
     </html>
   );

@@ -8,7 +8,7 @@ services:
       - OLLAMA_MODEL=llama3.2
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:4317
       - OTEL_SERVICE_NAME=ai-customer-service-core
-      - DATABASE_URL=sqlite:///data/db/core.db
+      - DATABASE_URL=sqlite+aiosqlite:///data/db/core.db
     volumes:
       - core_data:/app/data
     depends_on:
@@ -74,6 +74,8 @@ services:
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
     volumes:
       - ./docker/grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
+      - ./docker/grafana-dashboards.yaml:/etc/grafana/provisioning/dashboards/dashboards.yaml
+      - ./docker/dashboards:/var/lib/grafana/dashboards
       - grafana_data:/var/lib/grafana
     depends_on:
       - tempo

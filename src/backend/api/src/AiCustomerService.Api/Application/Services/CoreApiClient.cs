@@ -107,4 +107,10 @@ public sealed class CoreApiClient : ICoreApiClient
         return await response.Content.ReadFromJsonAsync<DashboardStatsDto>(ct)
             ?? throw new InvalidOperationException("Null response from Core API");
     }
+
+    public async Task<bool> CheckHealthAsync(CancellationToken ct = default)
+    {
+        var response = await _httpClient.GetAsync("/api/v1/health", ct);
+        return response.IsSuccessStatusCode;
+    }
 }

@@ -49,7 +49,7 @@ export default function InteractionDetailPage() {
   if (loading) {
     return (
       <Shell title="Interaction">
-        <div className="space-y-6 animate-pulse">
+        <div role="status" aria-label="Loading interaction" className="space-y-6 animate-pulse">
           <div className="h-8 w-32 rounded bg-gray-200" />
           <div className="h-40 rounded-lg bg-white shadow" />
           <div className="h-60 rounded-lg bg-white shadow" />
@@ -61,7 +61,7 @@ export default function InteractionDetailPage() {
   if (error || !interaction) {
     return (
       <Shell title="Interaction">
-        <div className="rounded-lg bg-red-50 border border-red-200 p-6">
+        <div role="alert" className="rounded-lg bg-red-50 border border-red-200 p-6">
           <p className="text-sm text-red-800">{error ?? 'Interaction not found'}</p>
           <Link
             href="/interactions"
@@ -82,7 +82,7 @@ export default function InteractionDetailPage() {
           href="/interactions"
           className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-gray-700"
         >
-          <ArrowLeft className="h-4 w-4" />
+          <ArrowLeft className="h-4 w-4" aria-hidden="true" />
           Back to Interactions
         </Link>
       </div>
@@ -105,13 +105,14 @@ export default function InteractionDetailPage() {
               <button
                 type="button"
                 onClick={() => void handleCopyId()}
+                aria-label="Copy interaction ID"
                 title="Copy interaction ID for Grafana lookup"
                 className="inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-xs text-gray-500 hover:text-gray-700 hover:bg-gray-100"
               >
                 {copied ? (
-                  <Check className="h-3.5 w-3.5 text-green-600" />
+                  <Check className="h-3.5 w-3.5 text-green-600" aria-hidden="true" />
                 ) : (
-                  <Copy className="h-3.5 w-3.5" />
+                  <Copy className="h-3.5 w-3.5" aria-hidden="true" />
                 )}
                 {copied ? 'Copied!' : 'Copy'}
               </button>
