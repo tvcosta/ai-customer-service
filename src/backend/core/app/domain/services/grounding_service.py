@@ -55,6 +55,9 @@ class GroundingService:
         return GroundingDecision(
             is_grounded=confidence >= 0.3,
             confidence=confidence,
-            reasoning=f"Keyword overlap: {overlap}/{len(meaningful_words)} meaningful words found in chunks",
+            reasoning=(
+                f"Keyword overlap: {overlap}/{len(meaningful_words)} "
+                "meaningful words found in chunks"
+            ),
             supporting_chunks=supporting,
         )

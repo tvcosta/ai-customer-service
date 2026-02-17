@@ -8,12 +8,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime
-from enum import Enum
+from enum import StrEnum
 
 from app.domain.models.citation import Citation
 
 
-class InteractionStatus(str, Enum):
+class InteractionStatus(StrEnum):
     """Status of a question-answering interaction."""
 
     ANSWERED = "answered"

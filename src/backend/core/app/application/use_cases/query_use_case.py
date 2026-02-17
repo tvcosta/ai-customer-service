@@ -74,7 +74,11 @@ class QueryUseCase:
 
         # Step 3: Generate answer with context
         context = "\n\n".join(f"[Chunk {c.id}]: {c.content}" for c in chunks)
-        prompt = f"Answer the following question based ONLY on the provided context. If the context doesn't contain the answer, say so.\n\nContext:\n{context}\n\nQuestion: {question}"
+        prompt = (
+            "Answer the following question based ONLY on the provided context. "
+            "If the context doesn't contain the answer, say so.\n\n"
+            f"Context:\n{context}\n\nQuestion: {question}"
+        )
         answer = await self._llm.generate(prompt, context)
 
         # Step 4: Evaluate grounding

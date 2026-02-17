@@ -2,22 +2,30 @@
 
 from __future__ import annotations
 
+from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
-from typing import AsyncGenerator
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import Settings
-from app.interfaces.api.routes import documents, health, interactions, knowledge_bases, query
+from app.dependencies import init_db, shutdown
+from app.interfaces.api.routes import (
+    dashboard,
+    documents,
+    health,
+    interactions,
+    knowledge_bases,
+    query,
+)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     """Application lifespan manager for startup and shutdown events."""
-    # Startup: Initialize resources here in future phases
+    await init_db()
     yield
-    # Shutdown: Clean up resources here in future phases
+    await shutdown()
 
 
 def create_app() -> FastAPI:
@@ -26,8 +34,6 @@ def create_app() -> FastAPI:
     Returns:
         Configured FastAPI application instance.
     """
-    settings = Settings()
-
     app = FastAPI(
         title="AI Customer Service Core",
         version="0.1.0",
@@ -50,6 +56,7 @@ def create_app() -> FastAPI:
     app.include_router(knowledge_bases.router)
     app.include_router(documents.router)
     app.include_router(interactions.router)
+    app.include_router(dashboard.router)
 
     return app
 

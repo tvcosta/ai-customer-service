@@ -26,7 +26,7 @@ class InMemoryVectorStore(VectorStorePort):
         Note: This is a stub implementation that returns all chunks for the KB
         without performing real vector similarity search.
         """
-        all_chunks = [c for c in self._chunks.values()]
+        all_chunks = list(self._chunks.values())
         return all_chunks[:top_k]
 
     async def delete_by_document(self, document_id: str) -> None:

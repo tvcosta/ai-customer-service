@@ -249,6 +249,19 @@ paths:
                 items:
                   $ref: "#/components/schemas/Interaction"
 
+  /api/v1/dashboard/stats:
+    get:
+      operationId: getDashboardStats
+      summary: Get aggregated dashboard statistics
+      tags: [Dashboard]
+      responses:
+        "200":
+          description: Dashboard statistics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardStats"
+
   /api/v1/interactions/{id}:
     parameters:
       - name: id
@@ -400,3 +413,23 @@ components:
         created_at:
           type: string
           format: date-time
+
+    DashboardStats:
+      type: object
+      required:
+        - total_interactions
+        - answered_count
+        - unknown_count
+        - knowledge_base_count
+        - document_count
+      properties:
+        total_interactions:
+          type: integer
+        answered_count:
+          type: integer
+        unknown_count:
+          type: integer
+        knowledge_base_count:
+          type: integer
+        document_count:
+          type: integer

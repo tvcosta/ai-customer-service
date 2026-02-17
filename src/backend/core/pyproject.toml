@@ -53,7 +53,7 @@ select = [
     "C4",  # flake8-comprehensions
     "UP",  # pyupgrade
 ]
-ignore = []
+ignore = ["B008"]  # Depends() in FastAPI defaults is standard pattern
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

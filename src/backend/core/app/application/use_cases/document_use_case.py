@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from app.domain.models.document import Document, DocumentStatus
 from app.domain.ports.document_store_port import DocumentStorePort
@@ -44,7 +44,7 @@ class DocumentUseCase:
             filename=filename,
             content_hash=content_hash,
             status=DocumentStatus.PENDING,
-            uploaded_at=datetime.now(timezone.utc),
+            uploaded_at=datetime.now(UTC),
         )
         return await self._store.save_document(doc)
 

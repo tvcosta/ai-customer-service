@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from app.domain.models.knowledge_base import KnowledgeBase
 from app.domain.ports.document_store_port import DocumentStorePort
@@ -36,7 +36,7 @@ class KnowledgeBaseUseCase:
             id=str(uuid.uuid4()),
             name=name,
             description=description,
-            created_at=datetime.now(timezone.utc),
+            created_at=datetime.now(UTC),
         )
         return await self._store.create_kb(kb)
 
