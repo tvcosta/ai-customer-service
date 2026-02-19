@@ -6,7 +6,9 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "react": "^19.0.0",
@@ -27,6 +29,11 @@
     "eslint": "^9.18.0",
     "eslint-config-next": "^15.1.6",
     "@eslint/eslintrc": "^3.2.0",
-    "autoprefixer": "^10.4.20"
+    "autoprefixer": "^10.4.20",
+    "vitest": "^2.1.8",
+    "@testing-library/react": "^16.1.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@vitejs/plugin-react": "^4.3.4",
+    "jsdom": "^25.0.1"
   }
 }

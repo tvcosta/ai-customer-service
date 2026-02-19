@@ -29,7 +29,9 @@
       "Bash(uv run python:*)",
       "Bash(uv run ruff check:*)",
       "Bash(uv run:*)",
-      "Bash(pnpm --dir /Users/tiagocosta/Source/Projects/ai-customer-service/src/frontend/admin build:*)"
+      "Bash(pnpm --dir /Users/tiagocosta/Source/Projects/ai-customer-service/src/frontend/admin build:*)",
+      "Bash(pnpm test:*)",
+      "Bash(dotnet test:*)"
     ],
     "deny": []
   },

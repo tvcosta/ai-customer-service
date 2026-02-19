@@ -124,3 +124,5 @@ docker-data/
 
 # Build outputs
 build/
+
+.serena/**

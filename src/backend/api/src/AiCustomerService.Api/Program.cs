@@ -65,3 +65,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.Run("http://0.0.0.0:5000");
+
+// Expose Program class for WebApplicationFactory in integration tests
+public partial class Program { }
