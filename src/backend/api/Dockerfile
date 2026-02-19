@@ -6,6 +6,7 @@ WORKDIR /src
 COPY AiCustomerService.Api.slnx .
 COPY Directory.Build.props .
 COPY src/AiCustomerService.Api/AiCustomerService.Api.csproj src/AiCustomerService.Api/
+COPY tests/AiCustomerService.Api.Tests/AiCustomerService.Api.Tests.csproj tests/AiCustomerService.Api.Tests/
 
 # Restore dependencies
 RUN dotnet restore AiCustomerService.Api.slnx
@@ -13,12 +14,8 @@ RUN dotnet restore AiCustomerService.Api.slnx
 # Copy all source files
 COPY . .
 
-# Build the project
-WORKDIR /src/src/AiCustomerService.Api
-RUN dotnet build -c Release --no-restore
-
-# Publish the application
-RUN dotnet publish -c Release --no-build -o /app/publish
+# Build and publish
+RUN dotnet publish src/AiCustomerService.Api/AiCustomerService.Api.csproj -c Release --no-restore -o /app/publish
 
 # Runtime stage
 FROM mcr.microsoft.com/dotnet/aspnet:10.0-preview AS runtime
